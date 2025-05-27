@@ -1,0 +1,61 @@
+<solids>
+    <box name="WorldSolid" x="world_size" y="world_size" z="world_size" lunit="mm"/>
+
+    <!-- Detector cúbico de germanio 
+    La densidad del Germanio es aproximadamente 5.32 g/cm3,
+    y queremos una masa de 2 kg => 2000 g / 5.32 g/cm3 ≈ 376 cm3
+    Una caja de: 7.2 cm × 7.2 cm × 7.2 cm ≈ 373 cm3 -->
+    <box name="detectorSolid" x="72" y="72" z="72 " lunit="mm"/>
+    
+    <!-- Sólido para la muestra de acero contaminada con K-40 -->
+    <box name="sampleSolid" x="50" y="50" z="20" lunit="mm"/>
+
+    <!-- Cubierta de cobre (sustracción) -->
+    <box name="copperOuterBox" x="82" y="82" z="82" lunit="mm"/>
+    <box name="copperInnerBox" x="72" y="72" z="72" lunit="mm"/>
+    <subtraction name="copperCoverSolid">
+        <first ref="copperOuterBox"/>
+        <second ref="copperInnerBox"/>
+        <position name="coverSubPos" x="0" y="0" z="0" unit="mm"/>
+    </subtraction>
+</solids>
+
+<structure>
+    <!-- {{{ Volumes definition (material and solid assignment) -->
+    <volume name="detectorVolume">
+        <materialref ref="G4_Ge"/>
+        <solidref ref="detectorSolid"/>
+    </volume>
+    <volume name="copperCoverVolume">
+        <materialref ref="G4_Cu"/>
+        <solidref ref="copperCoverSolid"/>
+    </volume>
+    <!-- Volumen para la muestra -->
+    <volume name="sourceVolume">
+        <materialref ref="Fe_with_K40"/>
+        <solidref ref="sampleSolid"/>
+    </volume>
+    <!-- }}} -->
+
+    <!-- {{{ Physical volume definition (volume and position assignment) -->
+    <volume name="World">
+        <materialref ref="Air"/>
+        <solidref ref="WorldSolid"/>
+
+        <physvol name="detector">
+            <volumeref ref="detectorVolume"/>
+            <position name="detectorPosition" x="0" y="0" z="0" unit="mm"/>
+        </physvol>
+
+        <physvol name="copperCover">
+            <volumeref ref="copperCoverVolume"/>
+            <position name="coverPosition" x="0" y="0" z="0" unit="mm"/>
+        </physvol>
+        <physvol name="source">
+            <volumeref ref="sourceVolume"/>
+            <position name="sourcePosition" x="0" y="0" z="51.1" unit="mm"/>
+        </physvol>
+    </volume>
+    <!-- }}} -->
+</structure>
+

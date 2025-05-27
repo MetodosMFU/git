@@ -1,0 +1,10 @@
+
+<TRestManager>
+
+<TRestDataSet name="G4Ana" verboseLevel="info">
+   <parameter name="filePattern" value="Run*_G4Ana_*.root"/>
+   <processObservables list="g4Ana" />
+   
+</TRestDataSet>
+
+</TRestManager>
